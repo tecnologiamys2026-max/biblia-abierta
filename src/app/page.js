@@ -30,8 +30,7 @@ export default async function Home() {
       {/* Navbar Superior */}
       <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
-          <h1 className="text-xl font-bold text-indigo-700">Biblia Abierta</h1>
-          <Link href="/admin" className="text-sm text-gray-500 hover:text-indigo-600 font-medium">Administración</Link>
+          <h1 className="text-xl font-bold text-indigo-700">Biblia Abierta #5</h1>
         </div>
       </nav>
 
