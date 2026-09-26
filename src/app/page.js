@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import InstallAppButton from '@/components/InstallAppButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +33,10 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
           <div className="flex items-center gap-3">
             <img src="/logo.jpg" alt="Logo Biblia Abierta #5" className="w-10 h-10 rounded-full object-cover shadow-sm border border-indigo-100" />
-            <h1 className="text-xl font-bold text-indigo-700">Biblia Abierta #5</h1>
+            <h1 className="text-xl font-bold text-indigo-700 hidden sm:block">Biblia Abierta #5</h1>
+          </div>
+          <div>
+            <InstallAppButton />
           </div>
         </div>
       </nav>
