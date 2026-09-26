@@ -14,6 +14,8 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Biblia Abierta #5",
   description: "Portal oficial de actividades de la Iglesia Biblia Abierta #5",
+  manifest: "/manifest.json",
+  themeColor: "#4338ca",
 };
 
 export default function RootLayout({ children }) {
