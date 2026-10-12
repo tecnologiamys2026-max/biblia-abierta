@@ -8,16 +8,21 @@ export default async function Home() {
   let actividades = [];
   let directiva = [];
   let extras = [];
+  let nombreIglesia = "Iglesia";
 
   try {
-    const [actRes, dirRes, extRes] = await Promise.all([
+    const [actRes, dirRes, extRes, cfgRes] = await Promise.all([
       prisma.actividad.findMany(),
       prisma.directiva.findMany({ orderBy: { createdAt: 'asc' } }),
-      prisma.actividadExtra.findMany({ orderBy: { createdAt: 'desc' } })
+      prisma.actividadExtra.findMany({ orderBy: { createdAt: 'desc' } }),
+      prisma.configuracion.findUnique({ where: { id: 'global' } })
     ]);
     actividades = actRes;
     directiva = dirRes;
     extras = extRes;
+    if (cfgRes?.nombre) {
+      nombreIglesia = cfgRes.nombre;
+    }
   } catch (e) {
     console.error("Error BD:", e);
   }
@@ -32,8 +37,8 @@ export default async function Home() {
       <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
           <div className="flex items-center gap-3">
-            <img src="/logo.jpg" alt="Logo Biblia Abierta #5" className="w-10 h-10 rounded-full object-cover shadow-sm border border-indigo-100" />
-            <h1 className="text-xl font-bold text-indigo-700 hidden sm:block">Biblia Abierta #5</h1>
+            <img src="/logo.jpg" alt={`Logo ${nombreIglesia}`} className="w-10 h-10 rounded-full object-cover shadow-sm border border-indigo-100" />
+            <h1 className="text-xl font-bold text-indigo-700 hidden sm:block">{nombreIglesia}</h1>
           </div>
           <div>
             <InstallAppButton />

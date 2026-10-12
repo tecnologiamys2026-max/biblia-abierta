@@ -1,7 +1,7 @@
 {
-  "name": "Biblia Abierta #5",
-  "short_name": "Biblia Abierta",
-  "description": "Portal de actividades de la Iglesia Biblia Abierta #5",
+  "name": "Iglesia",
+  "short_name": "Iglesia",
+  "description": "Portal oficial de actividades de la Iglesia",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

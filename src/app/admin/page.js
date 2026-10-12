@@ -8,13 +8,15 @@ const DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sáb
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
-  const [activeTab, setActiveTab] = useState("semana"); // semana, directiva, extras
+  const [activeTab, setActiveTab] = useState("semana"); // semana, directiva, extras, ajustes
   const [loading, setLoading] = useState(true);
 
   // Datos
   const [actividades, setActividades] = useState([]);
   const [directiva, setDirectiva] = useState([]);
   const [extras, setExtras] = useState([]);
+  const [nombreIglesia, setNombreIglesia] = useState("Iglesia");
+  const [descIglesia, setDescIglesia] = useState("");
 
   // Estados de Formularios
   const [diaEditando, setDiaEditando] = useState(null);
@@ -63,20 +65,49 @@ export default function AdminPage() {
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      const [resAct, resDir, resExt] = await Promise.all([
+      const [resAct, resDir, resExt, resCfg] = await Promise.all([
         fetch('/api/actividades'),
         fetch('/api/directiva'),
-        fetch('/api/extras')
+        fetch('/api/extras'),
+        fetch('/api/configuracion')
       ]);
-      const [dataAct, dataDir, dataExt] = await Promise.all([resAct.json(), resDir.json(), resExt.json()]);
+      const [dataAct, dataDir, dataExt, dataCfg] = await Promise.all([
+        resAct.json(),
+        resDir.json(),
+        resExt.json(),
+        resCfg.json()
+      ]);
       
       if (dataAct.success) setActividades(dataAct.data);
       if (dataDir.success) setDirectiva(dataDir.data);
       if (dataExt.success) setExtras(dataExt.data);
+      if (dataCfg.success && dataCfg.data) {
+        setNombreIglesia(dataCfg.data.nombre || "Iglesia");
+        setDescIglesia(dataCfg.data.descripcion || "");
+      }
     } catch (error) {
       toast.error("Error cargando datos");
     }
     setLoading(false);
+  };
+
+  const guardarConfiguracion = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/configuracion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: nombreIglesia, descripcion: descIglesia })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Nombre de la iglesia actualizado con éxito");
+      } else {
+        toast.error("Error al guardar configuración");
+      }
+    } catch (e) {
+      toast.error("Error al conectar con el servidor");
+    }
   };
 
   // --- MÉTODOS SEMANA ---
@@ -178,6 +209,7 @@ export default function AdminPage() {
             <button onClick={() => setActiveTab('semana')} className={`text-left px-4 py-3 rounded-md font-medium ${activeTab === 'semana' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50'}`}>Programa Semanal</button>
             <button onClick={() => setActiveTab('directiva')} className={`text-left px-4 py-3 rounded-md font-medium ${activeTab === 'directiva' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50'}`}>Directiva</button>
             <button onClick={() => setActiveTab('extras')} className={`text-left px-4 py-3 rounded-md font-medium ${activeTab === 'extras' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50'}`}>Actividades Extras</button>
+            <button onClick={() => setActiveTab('ajustes')} className={`text-left px-4 py-3 rounded-md font-medium ${activeTab === 'ajustes' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50'}`}>⚙️ Ajustes del Portal</button>
           </div>
         </div>
 
@@ -185,6 +217,46 @@ export default function AdminPage() {
         <div className="md:w-3/4 text-gray-900">
           {loading ? <p className="text-gray-600">Cargando...</p> : (
             <>
+              {/* PESTAÑA AJUSTES */}
+              {activeTab === 'ajustes' && (
+                <div className="bg-white p-6 shadow-sm rounded-lg border space-y-4">
+                  <header className="border-b pb-3 mb-2">
+                    <h2 className="text-xl font-bold text-gray-900">Ajustes Generales del Portal</h2>
+                    <p className="text-sm text-gray-500">Configura el nombre visible de la iglesia en la página web y en la app.</p>
+                  </header>
+                  <form onSubmit={guardarConfiguracion} className="space-y-4 max-w-lg">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">Nombre de la Iglesia</label>
+                      <input
+                        type="text"
+                        value={nombreIglesia}
+                        onChange={(e) => setNombreIglesia(e.target.value)}
+                        placeholder="Ej: Iglesia Central, Iglesia Bíblica..."
+                        required
+                        className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">Descripción / Subtítulo</label>
+                      <input
+                        type="text"
+                        value={descIglesia}
+                        onChange={(e) => setDescIglesia(e.target.value)}
+                        placeholder="Ej: Portal oficial de actividades y servicios"
+                        className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div className="pt-2">
+                      <button
+                        type="submit"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-lg shadow-sm transition-colors"
+                      >
+                        Guardar Cambios
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
               {/* PESTAÑA SEMANA */}
               {activeTab === 'semana' && (
                 diaEditando ? (
