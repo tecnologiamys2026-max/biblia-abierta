@@ -35,12 +35,23 @@ export default async function Home() {
       
       {/* Navbar Superior */}
       <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
-          <div className="flex items-center gap-3">
-            <img src="/logo.jpeg" alt={`Logo ${nombreIglesia}`} className="w-10 h-10 rounded-full object-cover shadow-sm border border-indigo-100" />
-            <h1 className="text-xl font-bold text-indigo-700 hidden sm:block">{nombreIglesia}</h1>
+        <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <img 
+              src="/logo.jpeg" 
+              alt={`Logo ${nombreIglesia}`} 
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover shadow-sm border border-indigo-100 flex-shrink-0" 
+            />
+            <div className="min-w-0 flex flex-col justify-center">
+              <h1 className="text-base sm:text-xl font-bold font-church text-indigo-900 tracking-wide truncate leading-tight">
+                {nombreIglesia}
+              </h1>
+              <span className="text-[10px] sm:text-xs text-indigo-500 font-medium tracking-wider uppercase hidden xs:block">
+                Portal de Actividades
+              </span>
+            </div>
           </div>
-          <div>
+          <div className="flex-shrink-0">
             <InstallAppButton />
           </div>
         </div>
@@ -50,16 +61,30 @@ export default async function Home() {
       <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col lg:flex-row">
         
         {/* SIDEBAR (Portal Menu) */}
-        <aside className="w-full lg:w-64 bg-indigo-900 text-white lg:min-h-[calc(100vh-4rem)] p-6 shadow-inner">
+        <aside className="w-full lg:w-64 bg-indigo-900 text-white lg:min-h-[calc(100vh-4rem)] p-4 sm:p-6 shadow-inner">
           <div className="lg:sticky lg:top-24">
-            <h2 className="text-xs uppercase tracking-wider text-indigo-300 font-semibold mb-4">Secciones</h2>
-            <nav className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0">
-              <a href="#semana" className="flex-shrink-0 bg-indigo-800 hover:bg-indigo-700 px-4 py-3 rounded-lg font-medium transition-colors">Programación Semanal</a>
-              <a href="#directiva" className="flex-shrink-0 hover:bg-indigo-800 px-4 py-3 rounded-lg font-medium transition-colors">Directiva</a>
-              <a href="#extras" className="flex-shrink-0 hover:bg-indigo-800 px-4 py-3 rounded-lg font-medium transition-colors">Actividades Extras</a>
+            
+            {/* Cabecera / Banner para móviles con logo y nombre estilizado */}
+            <div className="flex lg:hidden items-center gap-3.5 p-3.5 mb-4 bg-indigo-950/70 rounded-xl border border-indigo-800/60 shadow-sm">
+              <img
+                src="/logo.jpeg"
+                alt={`Logo ${nombreIglesia}`}
+                className="w-12 h-12 rounded-full object-cover shadow-md border-2 border-indigo-300/40 p-0.5 bg-white flex-shrink-0"
+              />
+              <div className="min-w-0">
+                <p className="text-sm font-bold font-church text-white tracking-wide truncate">{nombreIglesia}</p>
+                <p className="text-[11px] text-indigo-300">Comunidad de Fe y Adoración</p>
+              </div>
+            </div>
+
+            <h2 className="text-xs uppercase tracking-wider text-indigo-300 font-semibold mb-3">Secciones</h2>
+            <nav className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
+              <a href="#semana" className="flex-shrink-0 bg-indigo-800 hover:bg-indigo-700 px-4 py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">Programación Semanal</a>
+              <a href="#directiva" className="flex-shrink-0 hover:bg-indigo-800 px-4 py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">Directiva</a>
+              <a href="#extras" className="flex-shrink-0 hover:bg-indigo-800 px-4 py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">Actividades Extras</a>
             </nav>
 
-            {/* Logo destacado en el menú lateral */}
+            {/* Logo destacado en el menú lateral (Versión Escritorio) */}
             <div className="hidden lg:flex flex-col items-center justify-center mt-10 p-5 bg-indigo-950/60 rounded-2xl border border-indigo-700/40 text-center shadow-inner">
               <div className="relative group">
                 <img
@@ -68,7 +93,7 @@ export default async function Home() {
                   className="w-28 h-28 rounded-full object-cover shadow-xl border-2 border-indigo-300/60 p-0.5 bg-white transition-transform duration-300 hover:scale-105"
                 />
               </div>
-              <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-indigo-200">{nombreIglesia}</p>
+              <p className="mt-3.5 text-sm font-bold font-church uppercase tracking-wider text-indigo-200">{nombreIglesia}</p>
             </div>
           </div>
         </aside>
