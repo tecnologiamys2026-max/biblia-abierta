@@ -37,7 +37,7 @@ export default async function Home() {
       <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
           <div className="flex items-center gap-3">
-            <img src="/logo.jpg" alt={`Logo ${nombreIglesia}`} className="w-10 h-10 rounded-full object-cover shadow-sm border border-indigo-100" />
+            <img src="/logo.jpeg" alt={`Logo ${nombreIglesia}`} className="w-10 h-10 rounded-full object-cover shadow-sm border border-indigo-100" />
             <h1 className="text-xl font-bold text-indigo-700 hidden sm:block">{nombreIglesia}</h1>
           </div>
           <div>
