@@ -35,22 +35,19 @@ export default async function Home() {
       
       {/* Navbar Superior */}
       <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center gap-2">
-          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-            <img 
-              src="/logo.jpeg" 
-              alt={`Logo ${nombreIglesia}`} 
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover shadow-sm border border-indigo-100 flex-shrink-0" 
-            />
-            <div className="min-w-0 flex flex-col justify-center">
-              <h1 className="text-base sm:text-xl font-bold font-church text-indigo-900 tracking-wide truncate leading-tight">
-                {nombreIglesia}
-              </h1>
-              <span className="text-[10px] sm:text-xs text-indigo-500 font-medium tracking-wider uppercase hidden xs:block">
-                Portal de Actividades
-              </span>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between relative">
+          
+          {/* Espacio a la izquierda para balancear el botón de la derecha */}
+          <div className="w-24 sm:w-36 hidden sm:block"></div>
+
+          {/* Nombre Centrado */}
+          <div className="flex-1 text-center min-w-0 px-2 sm:px-4">
+            <h1 className="text-lg sm:text-2xl font-bold font-church text-indigo-900 tracking-wider truncate">
+              {nombreIglesia}
+            </h1>
           </div>
+
+          {/* Botón Descargar App a la derecha */}
           <div className="flex-shrink-0">
             <InstallAppButton />
           </div>
@@ -63,19 +60,6 @@ export default async function Home() {
         {/* SIDEBAR (Portal Menu) */}
         <aside className="w-full lg:w-64 bg-indigo-900 text-white lg:min-h-[calc(100vh-4rem)] p-4 sm:p-6 shadow-inner">
           <div className="lg:sticky lg:top-24">
-            
-            {/* Cabecera / Banner para móviles con logo y nombre estilizado */}
-            <div className="flex lg:hidden items-center gap-3.5 p-3.5 mb-4 bg-indigo-950/70 rounded-xl border border-indigo-800/60 shadow-sm">
-              <img
-                src="/logo.jpeg"
-                alt={`Logo ${nombreIglesia}`}
-                className="w-12 h-12 rounded-full object-cover shadow-md border-2 border-indigo-300/40 p-0.5 bg-white flex-shrink-0"
-              />
-              <div className="min-w-0">
-                <p className="text-sm font-bold font-church text-white tracking-wide truncate">{nombreIglesia}</p>
-                <p className="text-[11px] text-indigo-300">Comunidad de Fe y Adoración</p>
-              </div>
-            </div>
 
             <h2 className="text-xs uppercase tracking-wider text-indigo-300 font-semibold mb-3">Secciones</h2>
             <nav className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
