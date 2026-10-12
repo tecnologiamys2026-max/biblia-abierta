@@ -58,6 +58,18 @@ export default async function Home() {
               <a href="#directiva" className="flex-shrink-0 hover:bg-indigo-800 px-4 py-3 rounded-lg font-medium transition-colors">Directiva</a>
               <a href="#extras" className="flex-shrink-0 hover:bg-indigo-800 px-4 py-3 rounded-lg font-medium transition-colors">Actividades Extras</a>
             </nav>
+
+            {/* Logo destacado en el menú lateral */}
+            <div className="hidden lg:flex flex-col items-center justify-center mt-10 p-5 bg-indigo-950/60 rounded-2xl border border-indigo-700/40 text-center shadow-inner">
+              <div className="relative group">
+                <img
+                  src="/logo.jpeg"
+                  alt={`Emblema ${nombreIglesia}`}
+                  className="w-28 h-28 rounded-full object-cover shadow-xl border-2 border-indigo-300/60 p-0.5 bg-white transition-transform duration-300 hover:scale-105"
+                />
+              </div>
+              <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-indigo-200">{nombreIglesia}</p>
+            </div>
           </div>
         </aside>
 
