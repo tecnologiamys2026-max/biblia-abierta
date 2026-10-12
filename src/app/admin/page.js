@@ -132,9 +132,25 @@ export default function AdminPage() {
     const data = { dia: diaEditando, lugar, director, predicador, hora: `${hora}:${minutos} ${ampm}` };
     try {
       const res = await fetch('/api/actividades', { method: 'POST', body: JSON.stringify(data) });
-      if (res.ok) { toast.success("Guardado"); setDiaEditando(null); fetchAllData(); }
+      if (res.ok) { toast.success("Actividad guardada"); setDiaEditando(null); fetchAllData(); }
       else toast.error("Error al guardar");
-    } catch (e) { toast.error("Error"); }
+    } catch (e) { toast.error("Error de conexión"); }
+  };
+
+  const handleEliminarSemana = async (dia) => {
+    if (!confirm(`¿Estás seguro de que deseas dejar el día ${dia} sin actividad?`)) return;
+    try {
+      const res = await fetch(`/api/actividades?dia=${encodeURIComponent(dia)}`, { method: 'DELETE' });
+      if (res.ok) {
+        toast.success(`El día ${dia} ha quedado sin actividad`);
+        if (diaEditando === dia) setDiaEditando(null);
+        fetchAllData();
+      } else {
+        toast.error("Error al quitar la actividad");
+      }
+    } catch (e) {
+      toast.error("Error de conexión");
+    }
   };
 
   // --- MÉTODOS DIRECTIVA ---
@@ -261,33 +277,156 @@ export default function AdminPage() {
               {activeTab === 'semana' && (
                 diaEditando ? (
                   <div className="bg-white p-6 shadow-sm rounded-lg border">
-                    <h2 className="text-xl font-bold mb-4 text-gray-900">Editando: {diaEditando}</h2>
-                    <form className="space-y-4" onSubmit={handleGuardarSemana}>
-                      <div className="flex space-x-2">
-                        <select value={hora} onChange={e=>setHora(e.target.value)} className="border p-2 rounded text-gray-900 bg-white"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
-                        <select value={minutos} onChange={e=>setMinutos(e.target.value)} className="border p-2 rounded text-gray-900 bg-white"><option>00</option><option>30</option></select>
-                        <select value={ampm} onChange={e=>setAmpm(e.target.value)} className="border p-2 rounded text-gray-900 bg-white"><option>AM</option><option>PM</option></select>
+                    <div className="border-b pb-3 mb-5 flex justify-between items-center">
+                      <div>
+                        <h2 className="text-xl font-bold text-gray-900">Programación: {diaEditando}</h2>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {actividades.some(a => a.dia === diaEditando) 
+                            ? "Modifica los datos del servicio o déjalo sin actividad." 
+                            : "Asigna una nueva actividad para este día."}
+                        </p>
                       </div>
-                      <input type="text" placeholder="Lugar" required value={lugar} onChange={e=>setLugar(e.target.value)} className="w-full border p-2 rounded text-gray-900 bg-white" />
-                      <input type="text" placeholder="Director" required value={director} onChange={e=>setDirector(e.target.value)} className="w-full border p-2 rounded text-gray-900 bg-white" />
-                      <input type="text" placeholder="Predicador" required value={predicador} onChange={e=>setPredicador(e.target.value)} className="w-full border p-2 rounded text-gray-900 bg-white" />
-                      <div className="flex gap-2">
-                        <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded font-bold">Guardar</button>
-                        <button type="button" onClick={()=>setDiaEditando(null)} className="border px-4 py-2 rounded text-gray-700">Cancelar</button>
+                      <span className="text-xs font-semibold px-2.5 py-1 rounded bg-indigo-100 text-indigo-800">
+                        {diaEditando}
+                      </span>
+                    </div>
+
+                    <form className="space-y-4" onSubmit={handleGuardarSemana}>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-600 uppercase mb-1">Horario del Servicio</label>
+                        <div className="flex gap-2">
+                          <select value={hora} onChange={e=>setHora(e.target.value)} className="border border-gray-300 p-2 rounded text-gray-900 bg-white font-medium">
+                            {["1","2","3","4","5","6","7","8","9","10","11","12"].map(h => (
+                              <option key={h} value={h}>{h}</option>
+                            ))}
+                          </select>
+                          <select value={minutos} onChange={e=>setMinutos(e.target.value)} className="border border-gray-300 p-2 rounded text-gray-900 bg-white font-medium">
+                            <option value="00">00 min</option>
+                            <option value="15">15 min</option>
+                            <option value="30">30 min</option>
+                            <option value="45">45 min</option>
+                          </select>
+                          <select value={ampm} onChange={e=>setAmpm(e.target.value)} className="border border-gray-300 p-2 rounded text-gray-900 bg-white font-bold">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-gray-600 uppercase mb-1">Lugar</label>
+                        <input 
+                          type="text" 
+                          placeholder="Ej: Templo Central o Dirección" 
+                          required 
+                          value={lugar} 
+                          onChange={e=>setLugar(e.target.value)} 
+                          className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-indigo-500" 
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-gray-600 uppercase mb-1">Director del Culto</label>
+                        <input 
+                          type="text" 
+                          placeholder="Nombre del director" 
+                          required 
+                          value={director} 
+                          onChange={e=>setDirector(e.target.value)} 
+                          className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-indigo-500" 
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-gray-600 uppercase mb-1">Predicador</label>
+                        <input 
+                          type="text" 
+                          placeholder="Nombre del predicador o expositor" 
+                          required 
+                          value={predicador} 
+                          onChange={e=>setPredicador(e.target.value)} 
+                          className="w-full border border-gray-300 p-2.5 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-indigo-500 font-semibold text-indigo-900" 
+                        />
+                      </div>
+
+                      <div className="pt-3 border-t flex flex-wrap gap-2 items-center justify-between">
+                        <div className="flex gap-2">
+                          <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-bold shadow-sm transition">
+                            Guardar Actividad
+                          </button>
+                          <button type="button" onClick={()=>setDiaEditando(null)} className="border border-gray-300 hover:bg-gray-100 px-4 py-2 rounded-lg text-gray-700 transition">
+                            Cancelar
+                          </button>
+                        </div>
+
+                        {actividades.some(a => a.dia === diaEditando) && (
+                          <button 
+                            type="button" 
+                            onClick={()=>handleEliminarSemana(diaEditando)} 
+                            className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-1.5"
+                          >
+                            <span>🗑️</span> Dejar este día sin actividad
+                          </button>
+                        )}
                       </div>
                     </form>
                   </div>
                 ) : (
                   <div className="space-y-3">
+                    <div className="bg-indigo-50/70 border border-indigo-100 rounded-lg p-3 text-sm text-indigo-900 flex justify-between items-center">
+                      <span>Puedes editar cualquier día o dejarlo libre si no habrá culto.</span>
+                    </div>
+
                     {DIAS_SEMANA.map(dia => {
                       const act = actividades.find(a => a.dia === dia);
                       return (
-                        <div key={dia} className="bg-white border p-4 rounded flex justify-between items-center shadow-sm">
-                          <div>
-                            <h3 className="font-bold text-indigo-900">{dia}</h3>
-                            <p className="text-sm text-gray-500">{act ? `${act.hora} • ${act.predicador}` : 'Sin actividad'}</p>
+                        <div key={dia} className={`bg-white border rounded-xl p-4 shadow-sm transition ${act ? 'border-indigo-100' : 'border-gray-200 bg-gray-50/50'}`}>
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <h3 className="font-bold text-lg text-gray-900">{dia}</h3>
+                                {act ? (
+                                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                                    Con actividad
+                                  </span>
+                                ) : (
+                                  <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">
+                                    Sin actividad
+                                  </span>
+                                )}
+                              </div>
+
+                              {act ? (
+                                <div className="text-sm text-gray-600 flex flex-wrap gap-x-4 gap-y-1 pt-0.5">
+                                  <span>⏰ <strong>{act.hora}</strong></span>
+                                  <span>📍 {act.lugar}</span>
+                                  <span>👤 Dir: {act.director}</span>
+                                  <span className="text-indigo-800 font-semibold">📖 Predica: {act.predicador}</span>
+                                </div>
+                              ) : (
+                                <p className="text-sm text-gray-400 italic">No hay actividades programadas para este día.</p>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-2 flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
+                              <button 
+                                onClick={()=>iniciarEdicionSemana(dia)} 
+                                className={`font-bold text-sm px-3.5 py-1.5 rounded-lg transition ${act ? 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
+                              >
+                                {act ? 'Editar' : '+ Programar'}
+                              </button>
+
+                              {act && (
+                                <button 
+                                  onClick={()=>handleEliminarSemana(dia)} 
+                                  title="Quitar actividad y dejar este día libre"
+                                  className="text-sm text-red-600 hover:text-red-800 hover:bg-red-50 border border-transparent hover:border-red-200 px-2.5 py-1.5 rounded-lg font-medium transition"
+                                >
+                                  Dejar libre
+                                </button>
+                              )}
+                            </div>
                           </div>
-                          <button onClick={()=>iniciarEdicionSemana(dia)} className="text-indigo-600 font-bold border px-3 py-1 rounded hover:bg-indigo-50">Editar</button>
                         </div>
                       );
                     })}

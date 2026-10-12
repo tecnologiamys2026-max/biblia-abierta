@@ -3,6 +3,18 @@ import { prisma } from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
+export async function GET() {
+  try {
+    const actividades = await prisma.actividad.findMany({
+      orderBy: { createdAt: 'asc' }
+    });
+    return NextResponse.json({ success: true, data: actividades });
+  } catch (error) {
+    console.error("Error obteniendo actividades:", error);
+    return NextResponse.json({ success: false, error: 'Error al obtener actividades' }, { status: 500 });
+  }
+}
+
 export async function POST(request) {
   try {
     const body = await request.json();
