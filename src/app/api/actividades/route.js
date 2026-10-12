@@ -48,14 +48,23 @@ export async function POST(request) {
   }
 }
 
-export async function GET() {
+export async function DELETE(request) {
   try {
-    const actividades = await prisma.actividad.findMany();
-    return NextResponse.json({ success: true, data: actividades });
+    const { searchParams } = new URL(request.url);
+    const dia = searchParams.get('dia');
+    const id = searchParams.get('id');
+
+    if (dia) {
+      await prisma.actividad.deleteMany({ where: { dia } });
+    } else if (id) {
+      await prisma.actividad.delete({ where: { id } });
+    }
+
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error obteniendo actividades:", error);
+    console.error("Error eliminando actividad:", error);
     return NextResponse.json(
-      { success: false, error: 'Hubo un error obteniendo las actividades' },
+      { success: false, error: 'Hubo un error al eliminar la actividad' },
       { status: 500 }
     );
   }
