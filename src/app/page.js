@@ -97,15 +97,67 @@ export default async function Home() {
             ) : (
               <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                 {actividades.map((act) => (
-                  <div key={act.id} className="bg-white shadow-md rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition">
-                    <div className="px-5 py-4 border-b border-gray-100 bg-indigo-50/30">
-                      <h3 className="text-lg font-bold text-indigo-900">{act.dia}</h3>
-                      <p className="text-sm font-semibold text-gray-600">{act.hora}</p>
+                  <div 
+                    key={act.id} 
+                    className="bg-white rounded-2xl border border-indigo-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col"
+                  >
+                    {/* Cabecera del Día */}
+                    <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-900 text-white px-5 py-4 flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-300 block">Culto Congregacional</span>
+                        <h3 className="text-xl font-bold font-church tracking-wide">{act.dia}</h3>
+                      </div>
+                      <div className="flex items-center gap-1.5 bg-white/15 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20 text-white font-semibold text-xs shadow-inner">
+                        <svg className="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{act.hora}</span>
+                      </div>
                     </div>
-                    <div className="px-5 py-4 space-y-3">
-                      <div><p className="text-xs text-gray-400 uppercase">Lugar</p><p className="text-sm text-gray-800">{act.lugar}</p></div>
-                      <div><p className="text-xs text-gray-400 uppercase">Director</p><p className="text-sm text-gray-800">{act.director}</p></div>
-                      <div><p className="text-xs text-gray-400 uppercase">Predicador</p><p className="text-sm font-bold text-indigo-700">{act.predicador}</p></div>
+
+                    {/* Detalles con Iconos Coloridos */}
+                    <div className="p-5 space-y-3.5 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-gray-50/40">
+                      
+                      {/* Lugar */}
+                      <div className="flex items-start gap-3 p-3 rounded-xl bg-rose-50/70 border border-rose-100 hover:bg-rose-50 transition-colors">
+                        <div className="w-10 h-10 rounded-lg bg-rose-500 text-white flex items-center justify-center flex-shrink-0 shadow-sm shadow-rose-200">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] font-bold uppercase tracking-wider text-rose-700">Lugar del Culto</p>
+                          <p className="text-sm font-semibold text-gray-800 break-words leading-snug mt-0.5">{act.lugar}</p>
+                        </div>
+                      </div>
+
+                      {/* Director */}
+                      <div className="flex items-start gap-3 p-3 rounded-xl bg-amber-50/70 border border-amber-100 hover:bg-amber-50 transition-colors">
+                        <div className="w-10 h-10 rounded-lg bg-amber-500 text-white flex items-center justify-center flex-shrink-0 shadow-sm shadow-amber-200">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] font-bold uppercase tracking-wider text-amber-800">Director de Culto</p>
+                          <p className="text-sm font-semibold text-gray-800 break-words leading-snug mt-0.5">{act.director}</p>
+                        </div>
+                      </div>
+
+                      {/* Predicador */}
+                      <div className="flex items-start gap-3 p-3 rounded-xl bg-indigo-50/80 border border-indigo-100 hover:bg-indigo-50 transition-colors">
+                        <div className="w-10 h-10 rounded-lg bg-indigo-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] font-bold uppercase tracking-wider text-indigo-700">Predicador de la Palabra</p>
+                          <p className="text-sm font-bold text-indigo-950 break-words leading-snug mt-0.5">{act.predicador}</p>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 ))}
